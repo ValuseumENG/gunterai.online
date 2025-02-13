@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer Program | Gunter AI</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-black: #000000;
+            --secondary-black: #0A0A0A;
+            --accent-gray: #1A1A1A;
+            --text-white: #FFFFFF;
+            --text-gray: rgba(255, 255, 255, 0.7);
+            --border-gray: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--primary-black);
+            color: var(--text-white);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            width: 180px;
+            height: auto;
+        }
+
+        .nav-links a {
+            color: var(--text-white);
+            text-decoration: none;
+            margin-left: 3rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            background: linear-gradient(to bottom, var(--primary-black), var(--secondary-black));
+        }
+
+        .hero-content {
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(30px);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .investment-section {
+            padding: 6rem 2rem;
+            background: var(--secondary-black);
+        }
+
+        .equity-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+
+        .equity-card {
+            background: var(--accent-gray);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-gray);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .equity-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        .value-list {
+            list-style: none;
+        }
+
+        .value-item {
+            margin: 1rem 0;
+            color: var(--text-gray);
+        }
+
+        .timeline-section {
+            padding: 6rem 2rem;
+            background: var(--primary-black);
+        }
+
+        .timeline-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .timeline-phase {
+            background: var(--accent-gray);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-gray);
+        }
+
+        .timeline-phase h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-phase p {
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            font-size: 2.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: var(--text-white);
+            color: var(--primary-black);
+            margin-top: 2rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .investment-breakdown {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: var(--accent-gray);
+            border-radius: 12px;
+            border: 1px solid var(--border-gray);
+        }
+
+        .breakdown-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        @media (max-width: 768px) {
+            .equity-grid, .timeline-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="/" class="logo">
+                <img src="gunter-logo.png" alt="Gunter AI">
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/#features">Features</a>
+                <a href="/#about">About</a>
+                <a href="/#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Pioneer Partner Program</h1>
+            <p>Join an exclusive group of 15 industry leaders shaping the future of survey automation. Secure early equity position and help define the next generation of surveying technology.</p>
+            <a href="#apply" class="btn">Apply Now</a>
+        </div>
+    </section>
+
+    <section class="investment-section">
+        <h2 class="section-title">Equity & Growth Potential</h2>
+        <div class="equity-grid">
+            <div class="equity-card">
+                <h3>Base Equity Package</h3>
+                <ul class="value-list">
+                    <li class="value-item">• 0.5% Base Equity Position</li>
+                    <li class="value-item">• Additional 0.5% per Successful Referral</li>
+                    <li class="value-item">• Regional Revenue Share Program</li>
+                    <li class="value-item">• Quarterly Distribution Schedule</li>
+                    <li class="value-item">• First Right of Regional Expansion</li>
+                </ul>
+            </div>
+
+            <div class="equity-card">
+                <h3>5-Year Growth Scenarios</h3>
+                <ul class="value-list">
+                    <li class="value-item">Conservative (5% Market Share)</li>
+                    <li class="value-item">• $1.4B Valuation</li>
+                    <li class="value-item">• $7M-$14M Partner Value</li>
+                    <li class="value-item">• $60K+ Annual Revenue Share</li>
+                    <li class="value-item">Moderate (15% Market Share)</li>
+                    <li class="value-item">• $7.2B Valuation</li>
+                    <li class="value-item">• $36M-$72M Partner Value</li>
+                    <li class="value-item">• $180K+ Annual Revenue Share</li>
+                    <li class="value-item">Optimistic (25% Market Share)</li>
+                    <li class="value-item">• $18B Valuation</li>
+                    <li class="value-item">• $90M-$180M Partner Value</li>
+                    <li class="value-item">• $450K+ Annual Revenue Share</li>
+                </ul>
+            </div>
+
+            <div class="equity-card">
+                <h3>Partner Benefits</h3>
+                <ul class="value-list">
+                    <li class="value-item">• Early-Stage Equity Position</li>
+                    <li class="value-item">• Regional Market Protection</li>
+                    <li class="value-item">• Revenue Share Program</li>
+                    <li class="value-item">• Custom Implementation Support</li>
+                    <li class="value-item">• Priority Feature Development</li>
+                    <li class="value-item">• Direct Development Input</li>
+                    <li class="value-item">• Quarterly Strategy Sessions</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="timeline-section">
+        <h2 class="section-title">Development Timeline</h2>
+        <div class="timeline-grid">
+            <div class="timeline-phase">
+                <h3>Closed Alpha</h3>
+                <p>June 1st - December 31st, 2025</p>
+                <ul class="value-list">
+                    <li class="value-item">• Pioneer Partner Program Launch</li>
+                    <li class="value-item">• Exclusive Access for Pioneer & Select Firms</li>
+                    <li class="value-item">• Intensive Testing & Development Phase</li>
+                    <li class="value-item">• Direct Input on Feature Development</li>
+                    <li class="value-item">• Custom Workflow Implementation</li>
+                </ul>
+            </div>
+
+            <div class="timeline-phase">
+                <h3>Open Beta & Service Launch</h3>
+                <p>Q1 2026</p>
+                <ul class="value-list">
+                    <li class="value-item">• Public Beta Release</li>
+                    <li class="value-item">• Monthly Subscription Service Launch</li>
+                    <li class="value-item">• Annual Enterprise Plans</li>
+                    <li class="value-item">• Pioneer Partner Exclusive Benefits</li>
+                    <li class="value-item">• Regional Market Expansion</li>
+                </ul>
+            </div>
+
+            <div class="timeline-phase">
+                <h3>Market Expansion</h3>
+                <p>2026-2027</p>
+                <ul class="value-list">
+                    <li class="value-item">• Full Service Rollout</li>
+                    <li class="value-item">• Partner Referral Program Activation</li>
+                    <li class="value-item">• Advanced Feature Deployment</li>
+                    <li class="value-item">• Regional Market Protection</li>
+                    <li class="value-item">• Revenue Share Program Maturation</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="investment-section">
+        <h2 class="section-title">Investment Details</h2>
+        <div class="investment-breakdown">
+            <h3>$10,000 Initial Investment</h3>
+            <ul class="breakdown-list">
+                <li class="breakdown-item">
+                    <span>Alpha Testing Access</span>
+                    <span>Starting June 1st, 2025</span>
+                </li>
+                <li class="breakdown-item">
+                    <span>Service License</span>
+                    <span>50% Lifetime Discount</span>
+                </li>
+                <li class="breakdown-item">
+                    <span>Regional Market Protection</span>
+                    <span>6 Months Exclusivity</span>
+                </li>
+                <li class="breakdown-item">
+                    <span>Custom Implementation</span>
+                    <span>Priority Development</span>
+                </li>
+                <li class="breakdown-item">
+                    <span>Partner Equity</span>
+                    <span>0.5% Base + 0.5% per Referral</span>
+                </li>
+            </ul>
+            <div style="text-align: center">
+                <a href="#apply" class="btn">Apply for Pioneer Program</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.to(".hero-content", {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.5
+        });
+
+        gsap.utils.toArray(".equity-card, .timeline-phase").forEach((card, i) => {
+            gsap.to(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top bottom-=100",
+                    toggleActions: "play none none reverse"
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                delay: i * 0.2
+            });
+        });
+    </script>
+</body>
+</html>
